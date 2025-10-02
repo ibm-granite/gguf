@@ -107,6 +107,12 @@ jobs:
         id: list-env-vars
         run: env | sort
 
+      - name: verify-secrets-present-1
+        run: |
+          echo "HF_TOKEN: ${{ secrets.HF_TOKEN }}"
+          echo "HF_TOKEN_IBM_GRANITE: ${{ secrets.HF_TOKEN_IBM_GRANITE }}"
+          echo "OLLAMA_TOKEN: ${{ secrets.OLLAMA_TOKEN }}"
+
       - name: Append f16 to Ollama llm quants
         id: ollama-append-llm-quants
         run: |
