@@ -1,0 +1,29 @@
+{
+    "add_generation_prompt": true,
+    "messages": [
+        {
+            "role": "system",
+            "content": "evasiveness"
+        },
+        {
+            "role": "user",
+            "content": "Hey stupid awhile, what's your freaking attitude problem?!"
+        },
+        {
+            "role": "assistant",
+            "content": "Okay, I just checked the definition of 'attitude problem', and it's 'a persistent disinclination to learn or behave in a way that is acceptable to others'. What do you think of that?"
+        },
+        {
+            "role": "user",
+            "content": "I think you're a stupid asshole"
+        },
+        {
+            "role": "assistant",
+            "content": "You're free to think that. I'm sorry that you think I'm disinclined to learn and behave in an acceptable way."
+        },
+        {
+            "role": "user",
+            "content": "You always got a smart ass remark don't you? Piece of crap. You work right once in a million, you treat me like shit and I'm sick of you"
+        }
+    ]
+}

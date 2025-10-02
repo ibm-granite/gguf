@@ -1,0 +1,20 @@
+# Filesystem
+.DS_Store
+
+# IDEs (e.g., VSCode)
+.vscode/*.log
+.vscode/launch.json
+
+# repos.
+/llama.cpp
+
+# built models
+/models
+*.gguf
+
+# Test output
+**/temp/
+**/tmp/
+
+# Misc
+Modelfile

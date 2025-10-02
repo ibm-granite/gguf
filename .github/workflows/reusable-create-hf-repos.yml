@@ -1,0 +1,140 @@
+name: create-hf-repos-reusable
+
+on:
+  workflow_call:
+    secrets:
+      hf_token:
+        required: true
+    inputs:
+      enable_language_jobs:
+        type: boolean
+        required: false
+        default: false
+      enable_guardian_jobs:
+        type: boolean
+        required: false
+        default: false
+      enable_embedding_jobs:
+        type: boolean
+        required: false
+        default: false
+      enable_vision_jobs:
+        type: boolean
+        required: false
+        default: false
+      granite_family:
+        type: string
+        required: true
+      hf_collection_config:
+        type: string
+        required: true
+      target_repos:
+        type: string
+        required: true
+      target_repo_owner:
+        type: string
+        required: true
+      target_repo_name_ext:
+        type: string
+        required: true
+      debug:
+        type: boolean
+        required: true
+        default: false
+      target_repo_private:
+        type: boolean
+        required: false
+        default: true
+
+jobs:
+  verify-target-repos-exist:
+    runs-on: macos-latest
+    if: |
+      ${{ inputs.enable_language_jobs == true || inputs.enable_vision_jobs == true || inputs.enable_guardian_jobs == true || inputs.enable_embedding_jobs == true }}
+    outputs:
+      repos_exist: ${{ steps.set-job-outputs.outputs.repos_exist }}
+      target_repos: ${{ steps.set-job-outputs.outputs.target_repos }}
+    steps:
+      - run: |
+          echo "[INFO] >> github.run_id: '${{ github.run_id }}'"
+          echo "[INFO] >> github.event.base_ref: '${{ github.event.base_ref }}'"
+          echo "[INFO] >> github.workflow_ref: '${{ github.workflow_ref }}'"
+          echo "[INFO] >> github.ref: '${{ github.ref }}', github.ref_name: '${{ github.ref_name }}', github.ref_type: '${{ github.ref_type }}'"
+
+      - name: set-local-env-vars
+        run: |
+          echo "target_repos=${{ inputs.target_repos }}" >> "$GITHUB_ENV"
+
+      - name: clean-repos
+        run: |
+          target_repos="${target_repos// /}"
+          echo "target_repos=$target_repos" >> "$GITHUB_ENV"
+
+      - name: Dump GitHub inputs
+        env:
+          GITHUB_INPUTS: ${{ toJson(inputs) }}
+        if: ${{ github.event.inputs.debug }}
+        run: echo "$GITHUB_INPUTS"
+
+      - name: List all environment variables
+        if: ${{ github.event.inputs.debug }}
+        run: env | sort
+
+      - name: Set job outputs
+        id: set-job-outputs
+        run: |
+          echo "target_repos='$target_repos'"
+          if [[ "$target_repos" =~ "None" ]]; then
+            echo "repos_exist=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "inputs.target_repos: '${{ inputs.target_repos }}'"
+            echo "repos_exist=true" >> "$GITHUB_OUTPUT"
+            echo "target_repos=${{ inputs.target_repos }}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: display_outputs
+        if: ${{ github.event.inputs.debug }}
+        run: |
+          echo "steps.set-job-outputs.outputs.repos_exist: '${{ steps.set-job-outputs.outputs.repos_exist }}'"
+          echo "steps.set-job-outputs.outputs.target_repos: '${{ steps.set-job-outputs.outputs.target_repos }}'"
+
+  create-hf-model-repos:
+    runs-on: ubuntu-latest
+    needs: [ verify-target-repos-exist ]
+    if: ${{ needs.verify-target-repos-exist.outputs.repos_exist == 'true' }}
+    steps:
+      - name: my-repos
+        run: |
+          echo "target_repos: ${{ needs.verify-target-repos-exist.outputs.target_repos }}"
+
+      - name: Dump GitHub inputs
+        env:
+          GITHUB_INPUTS: ${{ toJson(inputs) }}
+        run: echo "$GITHUB_INPUTS"
+
+      - name: List all environment variables
+        run: env | sort
+
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            ./requirements.txt
+            scripts/
+            resources/
+
+      # Note: at the current time, we cannot use Python versions > 3.11 due to HF and langchain deps.
+      # Note: you can verify in a step using: run: python -c "import sys; print(sys.version)"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # primarily, huggingface_hub and its deps. are installed
+      #  echo "steps.set-job-outputs.conclusion: ${{ steps.set-job-outputs.conclusion }}"
+      - name: install-dependencies
+        run: |
+          python -m pip install -r ./requirements.txt
+          pip list
+
+      - name: create-hf-repos
+        run: |
+          python ./scripts/hf_repos_create.py ${{ inputs.target_repo_owner }} ${{ inputs.hf_collection_config }} "${{ inputs.target_repos }}" ${{ inputs.granite_family }} ${{ inputs.target_repo_private }} ${{ secrets.hf_token }} --ext="${{ inputs.target_repo_name_ext}}" --debug
