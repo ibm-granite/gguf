@@ -89,6 +89,13 @@ jobs:
             resources/ollama
             resources/LICENSE-2.0.txt
 
+      - name: verify-secrets-present-2
+        run: |
+          echo "hf_token: ${{ secrets.hf_token }}"
+          echo "HF_TOKEN: ${{ secrets.HF_TOKEN }}"
+          echo "HF_TOKEN_IBM_GRANITE: ${{ secrets.HF_TOKEN_IBM_GRANITE }}"
+          echo "OLLAMA_TOKEN: ${{ secrets.OLLAMA_TOKEN }}"
+
       - name: confirm-environment
         run: |
           uname -a
@@ -100,13 +107,6 @@ jobs:
           echo "env.F16_OPT_ENABLED: ${{ env.F16_OPT_ENABLED }}"
           echo "env.FIND_ARGS: ${{ env.FIND_ARGS }}"
           echo "env.MODEL_DOWNLOAD_DIR: ${{ env.MODEL_DOWNLOAD_DIR }}"
-
-      - name: verify-secrets-present-2
-        run: |
-          echo "hf_token: ${{ secrets.hf_token }}"
-          echo "HF_TOKEN: ${{ secrets.HF_TOKEN }}"
-          echo "HF_TOKEN_IBM_GRANITE: ${{ secrets.HF_TOKEN_IBM_GRANITE }}"
-          echo "OLLAMA_TOKEN: ${{ secrets.OLLAMA_TOKEN }}"
 
       - uses: actions/setup-python@v5
         with:
