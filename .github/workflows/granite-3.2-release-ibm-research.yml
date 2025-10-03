@@ -150,7 +150,7 @@ jobs:
   # ===========================================================================
   instruct-create-hf-repos:
     needs: [ environment-setup ]
-    uses: IBM/gguf/.github/workflows/reusable-create-hf-repos.yml@main
+    uses: ibm-granite/gguf/.github/workflows/reusable-create-hf-repos.yml@main
     with:
       debug: ${{ needs.environment-setup.outputs.debug == 'true' }}
       granite_family: "instruct"
@@ -164,7 +164,7 @@ jobs:
 
   convert-hf-to-f16-gguf:
     needs: [ environment-setup, instruct-create-hf-repos ]
-    uses: IBM/gguf/.github/workflows/reusable-convert-hf-to-f16-gguf.yml@main
+    uses: ibm-granite/gguf/.github/workflows/reusable-convert-hf-to-f16-gguf.yml@main
     permissions:
       contents: write
       packages: write
@@ -194,7 +194,7 @@ jobs:
       matrix:
         repo_id: ${{ fromJson(needs.environment-setup.outputs.source_instruct_repos) }}
         quantization: ${{ fromJson(needs.environment-setup.outputs.target_instruct_quantizations) }}
-    uses: IBM/gguf/.github/workflows/reusable-quantize-upload-gguf.yml@main
+    uses: ibm-granite/gguf/.github/workflows/reusable-quantize-upload-gguf.yml@main
     with:
       debug: ${{ needs.environment-setup.outputs.debug == 'true' }}
       trace: ${{ needs.environment-setup.outputs.trace == 'true' }}
@@ -209,7 +209,7 @@ jobs:
 
   bvt-instruct-quantized-gguf-models:
     needs: [ environment-setup, quantize-upload-gguf ]
-    uses: IBM/gguf/.github/workflows/reusable-bvt-instruct-quantized-models-gguf.yml@main
+    uses: ibm-granite/gguf/.github/workflows/reusable-bvt-instruct-quantized-models-gguf.yml@main
     permissions:
       contents: write
       packages: write
@@ -235,7 +235,7 @@ jobs:
       environment-setup,
       bvt-instruct-quantized-gguf-models,
     ]
-    uses: IBM/gguf/.github/workflows/reusable-create-hf-collections.yml@main
+    uses: ibm-granite/gguf/.github/workflows/reusable-create-hf-collections.yml@main
     with:
       granite_family: "instruct"
       debug: ${{ needs.environment-setup.outputs.debug == 'true' }}
@@ -252,7 +252,7 @@ jobs:
   # ===========================================================================
   vision-create-hf-repos:
     needs: [ environment-setup ]
-    uses: IBM/gguf/.github/workflows/reusable-create-hf-repos.yml@main
+    uses: ibm-granite/gguf/.github/workflows/reusable-create-hf-repos.yml@main
     with:
       debug: ${{ needs.environment-setup.outputs.debug == 'true' }}
       granite_family: "vision"
@@ -266,7 +266,7 @@ jobs:
 
   convert-hf-llava-to-f16-gguf:
     needs: [ environment-setup, vision-create-hf-repos ]
-    uses: IBM/gguf/.github/workflows/reusable-convert-hf-llava-to-f16-gguf.yml@main
+    uses: ibm-granite/gguf/.github/workflows/reusable-convert-hf-llava-to-f16-gguf.yml@main
     permissions:
       contents: write
       packages: write
@@ -288,7 +288,7 @@ jobs:
 
   quantize-vision-llm-and-upload-gguf:
     needs: [ environment-setup, convert-hf-llava-to-f16-gguf ]
-    uses: IBM/gguf/.github/workflows/reusable-quantize-llava-upload-gguf.yml@main
+    uses: ibm-granite/gguf/.github/workflows/reusable-quantize-llava-upload-gguf.yml@main
     permissions:
       contents: write
       packages: write
@@ -311,7 +311,7 @@ jobs:
 
   bvt-vision-quantized-gguf-models:
     needs: [ environment-setup, quantize-vision-llm-and-upload-gguf ]
-    uses: IBM/gguf/.github/workflows/reusable-bvt-vision-quantized-models-gguf.yml@main
+    uses: ibm-granite/gguf/.github/workflows/reusable-bvt-vision-quantized-models-gguf.yml@main
     permissions:
       contents: write
       packages: write
@@ -337,7 +337,7 @@ jobs:
       environment-setup,
       bvt-vision-quantized-gguf-models,
     ]
-    uses: IBM/gguf/.github/workflows/reusable-create-hf-collections.yml@main
+    uses: ibm-granite/gguf/.github/workflows/reusable-create-hf-collections.yml@main
     with:
       granite_family: "vision"
       debug: ${{ needs.environment-setup.outputs.debug == 'true' }}
@@ -354,7 +354,7 @@ jobs:
   # ===========================================================================
   guardian-create-hf-repos:
     needs: [ environment-setup ]
-    uses: IBM/gguf/.github/workflows/reusable-create-hf-repos.yml@main
+    uses: ibm-granite/gguf/.github/workflows/reusable-create-hf-repos.yml@main
     with:
       debug: ${{ needs.environment-setup.outputs.debug == 'true' }}
       granite_family: "guardian"
@@ -368,7 +368,7 @@ jobs:
 
   guardian-convert-hf-to-f16-gguf:
     needs: [ environment-setup, guardian-create-hf-repos ]
-    uses: IBM/gguf/.github/workflows/reusable-convert-hf-to-f16-gguf.yml@main
+    uses: ibm-granite/gguf/.github/workflows/reusable-convert-hf-to-f16-gguf.yml@main
     permissions:
       contents: write
       packages: write
@@ -398,7 +398,7 @@ jobs:
       matrix:
         repo_id: ${{ fromJson(needs.environment-setup.outputs.source_guardian_repos) }}
         quantization: ${{ fromJson(needs.environment-setup.outputs.target_guardian_quantizations) }}
-    uses: IBM/gguf/.github/workflows/reusable-quantize-upload-gguf.yml@main
+    uses: ibm-granite/gguf/.github/workflows/reusable-quantize-upload-gguf.yml@main
     with:
       debug: ${{ needs.environment-setup.outputs.debug == 'true' }}
       trace: ${{ needs.environment-setup.outputs.trace == 'true' }}
@@ -413,7 +413,7 @@ jobs:
 
   guardian-bvt-quantized-gguf-models:
     needs: [ environment-setup, guardian-quantize-upload-gguf ]
-    uses: IBM/gguf/.github/workflows/reusable-bvt-guardian-quantized-models-gguf.yml@main
+    uses: ibm-granite/gguf/.github/workflows/reusable-bvt-guardian-quantized-models-gguf.yml@main
     permissions:
       contents: write
       packages: write
@@ -439,7 +439,7 @@ jobs:
       environment-setup,
       guardian-bvt-quantized-gguf-models,
     ]
-    uses: IBM/gguf/.github/workflows/reusable-create-hf-collections.yml@main
+    uses: ibm-granite/gguf/.github/workflows/reusable-create-hf-collections.yml@main
     with:
       granite_family: "guardian"
       debug: ${{ needs.environment-setup.outputs.debug == 'true' }}

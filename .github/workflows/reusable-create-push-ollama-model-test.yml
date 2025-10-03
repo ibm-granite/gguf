@@ -2,9 +2,6 @@ name: create-ollama-model-reusable-test
 
 on:
   workflow_call:
-    secrets:
-      hf_token:
-        required: true
     inputs:
       debug:
         type: boolean
@@ -89,13 +86,6 @@ jobs:
             resources/ollama
             resources/LICENSE-2.0.txt
 
-      - name: verify-secrets-present-2
-        run: |
-          echo "hf_token: ${{ secrets.hf_token }}"
-          echo "HF_TOKEN: ${{ secrets.HF_TOKEN }}"
-          echo "HF_TOKEN_IBM_GRANITE: ${{ secrets.HF_TOKEN_IBM_GRANITE }}"
-          echo "OLLAMA_TOKEN: ${{ secrets.OLLAMA_TOKEN }}"
-
       - name: confirm-environment
         run: |
           uname -a
@@ -107,6 +97,13 @@ jobs:
           echo "env.F16_OPT_ENABLED: ${{ env.F16_OPT_ENABLED }}"
           echo "env.FIND_ARGS: ${{ env.FIND_ARGS }}"
           echo "env.MODEL_DOWNLOAD_DIR: ${{ env.MODEL_DOWNLOAD_DIR }}"
+
+      - name: verify-secrets-present-2
+        run: |
+          echo "hf_token: ${{ secrets.hf_token }}"
+          echo "HF_TOKEN: ${{ secrets.HF_TOKEN }}"
+          echo "HF_TOKEN_IBM_GRANITE: ${{ secrets.HF_TOKEN_IBM_GRANITE }}"
+          echo "OLLAMA_TOKEN: ${{ secrets.OLLAMA_TOKEN }}"
 
       - uses: actions/setup-python@v5
         with:
@@ -186,7 +183,7 @@ jobs:
 
       - name: verify-quantized-model-exists
         run: |
-          exists=$(python ./scripts/hf_model_file_exists.py ${{ env.TARGET_HF_REPO_ID }} ${{ env.BASE_FNAME_QUANTIZED_GGUF }} ${{secrets.hf_token}})
+          exists=$(python ./scripts/hf_model_file_exists.py ${{ env.TARGET_HF_REPO_ID }} ${{ env.BASE_FNAME_QUANTIZED_GGUF }} ${{secrets.HF_TOKEN_IBM_GRANITE}})
           echo "exists: '$exists'"
           if [[ "$exists" == "False" ]]; then
             echo "FAILURE: model file: '${{env.TARGET_HF_REPO_ID}}/${{env.BASE_FNAME_QUANTIZED_GGUF}}' does not exist."
@@ -202,7 +199,7 @@ jobs:
         run: |
           echo "Downloading model to: ${{env.LOCAL_FNAME_QUANTIZED_GGUF}}..."
           echo "--------------------"
-          python ./scripts/hf_file_download.py ${{ env.MODEL_DOWNLOAD_DIR}} ${{ env.TARGET_HF_REPO_ID }} ${{ env.BASE_FNAME_QUANTIZED_GGUF }} ${{secrets.hf_token}}
+          python ./scripts/hf_file_download.py ${{ env.MODEL_DOWNLOAD_DIR}} ${{ env.TARGET_HF_REPO_ID }} ${{ env.BASE_FNAME_QUANTIZED_GGUF }} ${{secrets.HF_TOKEN_IBM_GRANITE}}
           ls -al ${{env.LOCAL_FNAME_QUANTIZED_GGUF}}
 
       - name: hf-download-quantized-projector-gguf
@@ -210,7 +207,7 @@ jobs:
         run: |
           echo "Downloading projector model to: ${{env.LOCAL_FNAME_QUANTIZED_MMPROJ_GGUF}}..."
           echo "--------------------"
-          python ./scripts/hf_file_download.py ${{ env.MODEL_DOWNLOAD_DIR}} ${{ env.TARGET_HF_REPO_ID }} ${{ env.F16_MMPROJ_MODEL_FILENAME }} ${{secrets.secrets.hf_token}}
+          python ./scripts/hf_file_download.py ${{ env.MODEL_DOWNLOAD_DIR}} ${{ env.TARGET_HF_REPO_ID }} ${{ env.F16_MMPROJ_MODEL_FILENAME }} ${{secrets.secrets.HF_TOKEN_IBM_GRANITE}}
           ls -al ${{env.LOCAL_FNAME_QUANTIZED_MMPROJ_GGUF}}
 
       - name: verify-downloaded-files

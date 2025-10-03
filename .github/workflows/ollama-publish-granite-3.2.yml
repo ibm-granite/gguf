@@ -243,7 +243,7 @@ jobs:
   # ===========================================================================
   ollama-release-llm-models:
     needs: [ environment-setup ]
-    uses: IBM/gguf/.github/workflows/reusable-create-push-ollama-model.yml@main
+    uses: ibm-granite/gguf/.github/workflows/reusable-create-push-ollama-model.yml@main
     permissions:
       contents: write
       packages: write
@@ -270,7 +270,7 @@ jobs:
   # ===========================================================================
   ollama-release-guardian-models:
     needs: [ environment-setup ]
-    uses: IBM/gguf/.github/workflows/reusable-create-push-ollama-model.yml@main
+    uses: ibm-granite/gguf/.github/workflows/reusable-create-push-ollama-model.yml@main
     permissions:
       contents: write
       packages: write
@@ -297,7 +297,7 @@ jobs:
   # ===========================================================================
   ollama-release-embedding-models:
     needs: [ environment-setup ]
-    uses: IBM/gguf/.github/workflows/reusable-create-push-ollama-model.yml@main
+    uses: ibm-granite/gguf/.github/workflows/reusable-create-push-ollama-model.yml@main
     permissions:
       contents: write
       packages: write
@@ -324,7 +324,7 @@ jobs:
   # ===========================================================================
   ollama-release-vision-models:
     needs: [ environment-setup ]
-    uses: IBM/gguf/.github/workflows/reusable-create-push-ollama-model.yml@main
+    uses: ibm-granite/gguf/.github/workflows/reusable-create-push-ollama-model.yml@main
     permissions:
       contents: write
       packages: write
