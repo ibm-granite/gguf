@@ -28,9 +28,7 @@ env:
   # 'ibm-granite/granite-4.0-h-tiny',
   # 'ibm-granite/granite-4.0-h-tiny-base'
   SOURCE_LANGUAGE_REPOS: "[
-    'ibm-granite/granite-4.0-micro-base',
-    'ibm-granite/granite-4.0-h-micro-base',
-    'ibm-granite/granite-4.0-h-tiny-base'
+    'ibm-granite/granite-4.0-micro',
   ]"
   # 'Q2_K',
   # 'Q3_K_L', 'Q3_K_M', 'Q3_K_S',
@@ -141,8 +139,8 @@ jobs:
             echo "source_embedding_repos: '${{ steps.set-vars.outputs.source_embedding_repos }}'"
             echo "target_embedding_quantizations: '${{ steps.set-vars.outputs.target_embedding_quantizations }}'"
 
-      # - name: List all environment variables
-      #   run: env | sort
+      - name: List all environment variables
+        run: env | sort
 
       # - name: Dump runner context
       #   env:
@@ -156,10 +154,10 @@ jobs:
       #     GH_CONTEXT: ${{ toJson(github) }}
       #   run: echo "$GH_CONTEXT"
 
-      # - name: Dump GitHub quiet
-      #   env:
-      #     GH_QUIET: ${{ toJson(secrets) }}
-      #   run: echo "$GH_QUIET"
+      - name: Dump GitHub quiet
+        env:
+          GH_QUIET: ${{ toJson(secrets) }}
+        run: echo "$GH_QUIET"
 
   # ===========================================================================
   # Granite LLMs
