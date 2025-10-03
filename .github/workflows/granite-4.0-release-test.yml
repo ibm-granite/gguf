@@ -139,8 +139,8 @@ jobs:
             echo "source_embedding_repos: '${{ steps.set-vars.outputs.source_embedding_repos }}'"
             echo "target_embedding_quantizations: '${{ steps.set-vars.outputs.target_embedding_quantizations }}'"
 
-      - name: List all environment variables
-        run: env | sort
+      # - name: List all environment variables
+      #   run: env | sort
 
       # - name: Dump runner context
       #   env:
@@ -154,10 +154,10 @@ jobs:
       #     GH_CONTEXT: ${{ toJson(github) }}
       #   run: echo "$GH_CONTEXT"
 
-      - name: Dump GitHub quiet
-        env:
-          GH_QUIET: ${{ toJson(secrets) }}
-        run: echo "$GH_QUIET"
+      # - name: Dump GitHub quiet
+      #   env:
+      #     GH_QUIET: ${{ toJson(secrets) }}
+      #   run: echo "$GH_QUIET"
 
   # ===========================================================================
   # Granite LLMs
