@@ -101,11 +101,12 @@ jobs:
           echo "env.FIND_ARGS: ${{ env.FIND_ARGS }}"
           echo "env.MODEL_DOWNLOAD_DIR: ${{ env.MODEL_DOWNLOAD_DIR }}"
 
-      # - name: verify-secrets-present
-      #   run: |
-      #     echo "HF_TOKEN: ${{ secrets.HF_TOKEN }}"
-      #     echo "HF_TOKEN_IBM_GRANITE: ${{ secrets.HF_TOKEN_IBM_GRANITE }}"
-      #     echo "OLLAMA_TOKEN: ${{ secrets.OLLAMA_TOKEN }}"
+      - name: verify-secrets-present-2
+        run: |
+          echo "hf_token: ${{ secrets.hf_token }}"
+          echo "HF_TOKEN: ${{ secrets.HF_TOKEN }}"
+          echo "HF_TOKEN_IBM_GRANITE: ${{ secrets.HF_TOKEN_IBM_GRANITE }}"
+          echo "OLLAMA_TOKEN: ${{ secrets.OLLAMA_TOKEN }}"
 
       - uses: actions/setup-python@v5
         with:
