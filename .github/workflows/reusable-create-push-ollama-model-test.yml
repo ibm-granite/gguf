@@ -101,11 +101,11 @@ jobs:
           echo "env.FIND_ARGS: ${{ env.FIND_ARGS }}"
           echo "env.MODEL_DOWNLOAD_DIR: ${{ env.MODEL_DOWNLOAD_DIR }}"
 
-      - name: verify-secrets-present
-        run: |
-          echo "HF_TOKEN: ${{ secrets.HF_TOKEN }}"
-          echo "HF_TOKEN_IBM_GRANITE: ${{ secrets.HF_TOKEN_IBM_GRANITE }}"
-          echo "OLLAMA_TOKEN: ${{ secrets.OLLAMA_TOKEN }}"
+      # - name: verify-secrets-present
+      #   run: |
+      #     echo "HF_TOKEN: ${{ secrets.HF_TOKEN }}"
+      #     echo "HF_TOKEN_IBM_GRANITE: ${{ secrets.HF_TOKEN_IBM_GRANITE }}"
+      #     echo "OLLAMA_TOKEN: ${{ secrets.OLLAMA_TOKEN }}"
 
       - uses: actions/setup-python@v5
         with:
@@ -185,7 +185,7 @@ jobs:
 
       - name: verify-quantized-model-exists
         run: |
-          exists=$(python ./scripts/hf_model_file_exists.py ${{ env.TARGET_HF_REPO_ID }} ${{ env.BASE_FNAME_QUANTIZED_GGUF }} ${{secrets.HF_TOKEN_IBM_GRANITE}})
+          exists=$(python ./scripts/hf_model_file_exists.py ${{ env.TARGET_HF_REPO_ID }} ${{ env.BASE_FNAME_QUANTIZED_GGUF }} ${{secrets.hf_token}})
           echo "exists: '$exists'"
           if [[ "$exists" == "False" ]]; then
             echo "FAILURE: model file: '${{env.TARGET_HF_REPO_ID}}/${{env.BASE_FNAME_QUANTIZED_GGUF}}' does not exist."
@@ -201,7 +201,7 @@ jobs:
         run: |
           echo "Downloading model to: ${{env.LOCAL_FNAME_QUANTIZED_GGUF}}..."
           echo "--------------------"
-          python ./scripts/hf_file_download.py ${{ env.MODEL_DOWNLOAD_DIR}} ${{ env.TARGET_HF_REPO_ID }} ${{ env.BASE_FNAME_QUANTIZED_GGUF }} ${{secrets.HF_TOKEN_IBM_GRANITE}}
+          python ./scripts/hf_file_download.py ${{ env.MODEL_DOWNLOAD_DIR}} ${{ env.TARGET_HF_REPO_ID }} ${{ env.BASE_FNAME_QUANTIZED_GGUF }} ${{secrets.hf_token}}
           ls -al ${{env.LOCAL_FNAME_QUANTIZED_GGUF}}
 
       - name: hf-download-quantized-projector-gguf
@@ -209,7 +209,7 @@ jobs:
         run: |
           echo "Downloading projector model to: ${{env.LOCAL_FNAME_QUANTIZED_MMPROJ_GGUF}}..."
           echo "--------------------"
-          python ./scripts/hf_file_download.py ${{ env.MODEL_DOWNLOAD_DIR}} ${{ env.TARGET_HF_REPO_ID }} ${{ env.F16_MMPROJ_MODEL_FILENAME }} ${{secrets.secrets.HF_TOKEN_IBM_GRANITE}}
+          python ./scripts/hf_file_download.py ${{ env.MODEL_DOWNLOAD_DIR}} ${{ env.TARGET_HF_REPO_ID }} ${{ env.F16_MMPROJ_MODEL_FILENAME }} ${{secrets.secrets.hf_token}}
           ls -al ${{env.LOCAL_FNAME_QUANTIZED_MMPROJ_GGUF}}
 
       - name: verify-downloaded-files
