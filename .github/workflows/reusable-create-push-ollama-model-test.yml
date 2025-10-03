@@ -1,4 +1,4 @@
-name: create-ollama-model-reusable
+name: create-ollama-model-reusable-test
 
 on:
   workflow_call:
