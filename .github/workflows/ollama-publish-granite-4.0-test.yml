@@ -102,8 +102,6 @@ jobs:
     env:
       ARRAY_SEP: "','"
       QUANT_F16: "f16"
-    secrets:
-      hf_token: ${{ secrets.HF_TOKEN }}
     steps:
       - name: List all environment variables
         id: list-env-vars
