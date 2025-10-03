@@ -107,6 +107,10 @@ jobs:
         id: list-env-vars
         run: env | sort
 
+      - name: disk-check
+        id: disk-check
+        run: df -h
+
       - name: verify-secrets-present-1
         run: |
           echo "HF_TOKEN: ${{ secrets.HF_TOKEN }}"
