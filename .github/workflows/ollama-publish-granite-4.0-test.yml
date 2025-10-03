@@ -253,8 +253,7 @@ jobs:
       target_ollama_org: ${{ needs.environment-setup.outputs.target_ollama_org }}
       repo_id: ${{ matrix.repo_id }}
       quantization: ${{ matrix.quantization }}
-    secrets:
-      hf_token: ${{ secrets.HF_TOKEN_IBM_GRANITE }}
+    secrets: inherit
 
   # ===========================================================================
   # Ollama (guardian)
