@@ -254,7 +254,7 @@ jobs:
       repo_id: ${{ matrix.repo_id }}
       quantization: ${{ matrix.quantization }}
     secrets:
-      ollama_token: ${{ secrets.OLLAMA_TOKEN }}
+      OLLAMA_TOKEN: ${{ secrets.OLLAMA_TOKEN }}
 
   # ===========================================================================
   # Ollama (guardian)

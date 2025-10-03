@@ -3,7 +3,7 @@ name: create-ollama-model-reusable
 on:
   workflow_call:
     secrets:
-      ollama_token:
+      OLLAMA_TOKEN:
         required: true
     inputs:
       debug:
