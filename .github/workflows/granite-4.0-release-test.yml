@@ -37,14 +37,11 @@ env:
   # 'ibm-granite/granite-4.0-h-tiny',
   # 'ibm-granite/granite-4.0-h-tiny-base'
   SOURCE_LANGUAGE_REPOS: "[
-    'ibm-granite/granite-4.0-nano-300m',
-    'ibm-granite/granite-4.0-nano-300m-base',
-    'ibm-granite/granite-4.0-h-nano-300m',
-    'ibm-granite/granite-4.0-h-nano-300m-base',
-    'ibm-granite/granite-4.0-nano-1b',
-    'ibm-granite/granite-4.0-nano-1b-base',
-    'ibm-granite/granite-4.0-h-nano-1b',
-    'ibm-granite/granite-4.0-h-nano-1b-base'
+    'ibm-granite/granite-4.0-micro',
+    'ibm-granite/granite-4.0-micro-base'
+    'ibm-granite/granite-4.0-h-micro',
+    'ibm-granite/granite-4.0-h-micro-base'
+    'ibm-granite/granite-4.0-h-tiny'
   ]"
   # 'Q2_K',
   # 'Q3_K_L', 'Q3_K_M', 'Q3_K_S',
@@ -53,7 +50,7 @@ env:
   # 'Q6_K',
   # 'Q8_0'
   TARGET_LANGUAGE_QUANTIZATIONS: "[
-    'Q4_K_M'
+    'Q4_K_M', 'Q5_K_M'
   ]"
   SOURCE_GUARDIAN_REPOS: "[
     'None'
