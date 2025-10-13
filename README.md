@@ -204,7 +204,7 @@ Prior to "triggering" release workflows, some files need to be configured depend
 
 Project maintainers for this repo. are able to access the secrets (tokens) that are made available to the CI/CD release workflows/actions:
 
-[https://github.com/IBM/gguf/settings/secrets/actions](https://github.com/IBM/gguf/settings/secrets/actions)
+[https://github.com/ibm-granite/gguf/settings/secrets/actions](https://github.com/ibm-granite/gguf/settings/secrets/actions)
 
 Secrets are used to authenticate with Github and Huggingface (HF) and are already configured for the `ibm-granite` and `ibm-research` HF organizations for "preview" and "public" release types.
 
@@ -364,7 +364,7 @@ Once built locally, copy the following files from your `build/bin` directory to 
 
 This section contains the steps required to successfully "trigger" a release workflow for one or more supported Granite models families (i.e., `instruct` (language), `vision`, `guardian` and `embedding`).
 
-1. Click the [`Releases`](https://github.com/IBM/gguf/releases) link from the right column of the repo. home page which should be the URL [https://github.com/IBM/gguf/releases](https://github.com/IBM/gguf/releases).
+1. Click the [`Releases`](https://github.com/ibm-granite/gguf/releases) link from the right column of the repo. home page which should be the URL [https://github.com/ibm-granite/gguf/releases](https://github.com/ibm-granite/gguf/releases).
 1. Click the "Draft a new release" button near the top of the releases page.
 1. Click the "Choose a tag" drop-down menu and enter a tag name that starts with one of the following strings relative to which release type you want to "trigger":
 
@@ -388,7 +388,7 @@ At this point, you can observe the CI/CD workflows being run by the GitHub servi
 
 To observe the CI/CD process in action, please navigate to the following URL:
 
-- https://github.com/IBM/gguf/actions
+- https://github.com/ibm-granite/gguf/actions
 
 and look for the name of the `tag` you entered for the release (above) in the workflow run title.
 

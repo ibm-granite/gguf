@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # https://api.github.com/repos/IBM/gguf/actions/runs
+      # https://api.github.com/repos/ibm-granite/gguf/actions/runs
       - name: List workflow runs
         id: list_runs
         # env:
@@ -39,11 +39,11 @@ jobs:
           echo "=== END: runs_to_delete.json ========"
 
       - name: Delete cancelled and skipped workflows runs
-        id: delete_runs_to_delete      
+        id: delete_runs_to_delete
         run: |
           for line in $(cat "runs_to_delete.json"); do
             echo "'$line'"
-            run_id=$(echo "$line" | sed 's/[[:cntrl:]]//g') 
+            run_id=$(echo "$line" | sed 's/[[:cntrl:]]//g')
             curl -X DELETE -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
               "https://api.github.com/repos/${{ github.repository }}/actions/runs/$run_id"
-          done          
+          done
