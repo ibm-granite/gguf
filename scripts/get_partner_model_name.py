@@ -34,6 +34,7 @@ class SUPPORTED_MODEL_PARAMETER_SIZES(StrEnum):
     M107 = "107m"
     M125 = "125m"
     M278 = "278m"
+    M300 = "300m"
     B1   = "1b"
     B2   = "2b"
     B3   = "3b"
@@ -43,19 +44,14 @@ class SUPPORTED_MODEL_PARAMETER_SIZES(StrEnum):
     B20  = "20b"  # "function-calling"
     B30  = "30b"
     T1   = "1t"
+
+class ABSTRACT_MODEL_PARAMETER_SIZES(StrEnum):
     NANO    = "nano"
     MICRO   = "micro"
     TINY    = "tiny"  # NOTE: for v4.0 models we declare relative sizes using names (e.g., tiny ~= 7B)
     SMALL   = "small"
     MEDIUM  = "medium"
     LARGE   = "large"
-
-class ABSTRACT_MODEL_PARAMETER_SIZES(StrEnum):
-    SUPPORTED_MODEL_PARAMETER_SIZES.NANO
-    SUPPORTED_MODEL_PARAMETER_SIZES.MICRO
-    SUPPORTED_MODEL_PARAMETER_SIZES.TINY
-    SUPPORTED_MODEL_PARAMETER_SIZES.MEDIUM
-    SUPPORTED_MODEL_PARAMETER_SIZES.LARGE
 
 class SUPPORTED_MODEL_QUANTIZATIONS(StrEnum):
     F32     = "f32"
@@ -156,6 +152,7 @@ if __name__ == "__main__":
         model_modality = "" # e.g., "instruct", "vision"
         model_language = "" # e.g., "english", "multilingual"
         model_parameter_size = "" # e.g., 2B, 8B, 1T
+        model_abstract_size = "" # e.g., micro, tiny, small
         model_quantization = ""  # e.g., q8_0, q4_K_M
         model_active_parameter_count = "" # e.g., a800m, a400m
         model_release_stage = "" # Not used in name for now... e.g., preview
@@ -170,14 +167,20 @@ if __name__ == "__main__":
                model_version = version
                break
 
+        # NOTE: Have to test strictly for "-h" as ANY "h" occurrence will be found in model name
         for arch_desc in MODEL_ARCH_DESCRIPTIVE_TYPES:
-           if arch_desc in normalized_model_name:
+           if MODEL_ATTRIBUTE_SEP+arch_desc in normalized_model_name:
                model_arch_desc = arch_desc
                break
 
         for param_size in SUPPORTED_MODEL_PARAMETER_SIZES:
            if param_size in normalized_model_name:
                model_parameter_size = param_size
+               break
+
+        for abstract_param_size in ABSTRACT_MODEL_PARAMETER_SIZES:
+           if abstract_param_size in normalized_model_name:
+               model_abstract_size = abstract_param_size
                break
 
         for active_param_count in SUPPORTED_MODEL_ACTIVE_PARAMETER_COUNTS:
@@ -201,27 +204,16 @@ if __name__ == "__main__":
                model_release_stage = stage
                break
 
-        # Granite 4.0 fixup: as the HF model names dot not include "instruct"
-        # for now, we also check for the "size" as a secondary indicator of this case;
-        # however, defaulting to "instruct" could be explored...
-        if model_modality == "" and model_parameter_size in ABSTRACT_MODEL_PARAMETER_SIZES:
-            # ( model_parameter_size == SUPPORTED_MODEL_PARAMETER_SIZES.NANO or
-            # model_parameter_size == SUPPORTED_MODEL_PARAMETER_SIZES.MICRO or
-            # model_parameter_size == SUPPORTED_MODEL_PARAMETER_SIZES.TINY or
-            # model_parameter_size == SUPPORTED_MODEL_PARAMETER_SIZES.SMALL or
-            # model_parameter_size == SUPPORTED_MODEL_PARAMETER_SIZES.MEDIUM or
-            # model_parameter_size == SUPPORTED_MODEL_PARAMETER_SIZES.LARGE):
+        # Granite 4.0 fixup: as this version's HF model names do not include "instruct" (i.e., assumed default)
+        # For now, we use the presence of an abstract "size" as an indicator of this case (assuming
+        # this abstract naming will continue post v4).
+        if model_modality == "" and (model_abstract_size in ABSTRACT_MODEL_PARAMETER_SIZES):
             if model_release_stage == SUPPORTED_RELEASE_STAGES.PREVIEW:
                 # HACK: for "tiny-preview"
                 model_modality = SUPPORTED_MODEL_MODALITIES.INSTRUCT
-            else:
-                model_modality = "" # Assure we map to empty (i.e., Granite 4.0 names are "instruct" as default)
 
-        if model_version == "":
-            raise ValueError(f"Version not found in model name: `{normalized_model_name}`")
-
-        if model_parameter_size == "":
-            raise ValueError(f"Parameter size not found in model name: `{normalized_model_name}`")
+        # if model_parameter_size == "":
+        #     raise ValueError(f"Parameter size not found in model name: `{normalized_model_name}`")
 
         if model_quantization == "":
             raise ValueError(f"Quantization not found in model name: `{normalized_model_name}`")
@@ -237,6 +229,7 @@ if __name__ == "__main__":
                 model_modality='{model_modality}'\n \
                 model_version='{model_version}'\n \
                 model_parameter_size='{model_parameter_size}'\n \
+                model_abstract_size='{model_abstract_size}'\n \
                 model_active_parameter_count='{model_active_parameter_count}'\n \
                 model_quantization='{model_quantization}'\n \
                 model_language='{model_language}'\n \
@@ -248,6 +241,16 @@ if __name__ == "__main__":
 
             # Strip "v" from semver.
             model_version = model_version.replace("v", "")
+
+            # Note: Special casing legacy names for Ollama ONLY
+            # For "x.0" versions it was decided to leave off the minor version (i.e., ".0")
+            if model_version.endswith(MINOR_VERSION_POINT_ZERO):
+                # HACK: for original g4.0 preview we used the ".0"
+                if model_release_stage != SUPPORTED_RELEASE_STAGES.PREVIEW:
+                    model_version = model_version.removesuffix(MINOR_VERSION_POINT_ZERO)
+
+            # establish "base" model name with version:
+            partner_model_base = f"{model_family}{model_version}"
 
             # Note: Special casing legacy names for Ollama ONLY
             # "instruct" => "dense" or "moe" depending on parameter size (implies underlying arch.)
@@ -262,23 +265,20 @@ if __name__ == "__main__":
                         model_parameter_size == SUPPORTED_MODEL_PARAMETER_SIZES.B8):
                         model_layer_desc = MODEL_LAYER_DESCRIPTIVE_TYPES.DENSE
 
-            # Note: Special casing legacy names for Ollama ONLY
-            # For "x.0" versions it was decided to leave off the minor version (i.e., ".0")
-            if model_version.endswith(MINOR_VERSION_POINT_ZERO):
-                model_version = model_version.removesuffix(MINOR_VERSION_POINT_ZERO)
-
-            # establish "base" model name with version:
-            partner_model_base = f"{model_family}{model_version}"
-
             # Append model layer description if it exists
             if model_layer_desc != "":
-                # TODO: try ollama_append_attribute(partner_model_name, model_layer_desc)
-                partner_model_base = f"{partner_model_base}-{model_layer_desc}"
+                partner_model_base = ollama_append_attribute(partner_model_base, model_layer_desc)
+
+            # Append modality
+            # Note: Special case for models that are "instruct" or "base" language models
+            # where we leave off the modality classifier (i.e., "language" is implied)
+            if model_modality != "" and (model_modality != SUPPORTED_MODEL_MODALITIES.BASE and
+                model_modality != SUPPORTED_MODEL_MODALITIES.INSTRUCT):
+                partner_model_base = f"{partner_model_base}-{model_modality}"
 
             # Append build/release stage
             if model_release_stage != "":
-                # TODO: try ollama_append_attribute(partner_model_name, model_release_stage)
-                partner_model_base = f"{partner_model_base}-{model_release_stage}"
+                partner_model_base = ollama_append_attribute(partner_model_base, model_release_stage)
 
             # TODO: determine if we need to append this for partner models:
             # if model_active_parameter_count is not None:
@@ -293,15 +293,23 @@ if __name__ == "__main__":
             if model_parameter_size:
                 partner_model_name = ollama_append_attribute(partner_model_name, model_parameter_size)
 
+            if model_abstract_size:
+                partner_model_name = ollama_append_attribute(partner_model_name, model_abstract_size)
+
             if model_arch_desc:
                 partner_model_name = ollama_append_attribute(partner_model_name, model_arch_desc)
+
+            # HACK: for one-time exception to g4.0 "preview" model names which used instruct
+            if model_modality == "" and (model_version == SUPPORTER_MODEL_VERSIONS.GRANITE_4_0 and
+                model_release_stage == SUPPORTED_RELEASE_STAGES.PREVIEW):
+                    model_modality = SUPPORTED_MODEL_MODALITIES.INSTRUCT
 
             # for "instruct" and "base" language models, we add the modality classifier after the
             # parameter size to follow established conventions (if not the default quant.).
             if ((model_modality == SUPPORTED_MODEL_MODALITIES.BASE or
                 model_modality == SUPPORTED_MODEL_MODALITIES.INSTRUCT) and
                 not args.default_quant):
-                partner_model_name = f"{partner_model_name}-{model_modality}"
+                partner_model_name = ollama_append_attribute(partner_model_name, model_modality)
 
             # Note: used to trick registry into applying parameter size tag
             if not args.default_quant:
