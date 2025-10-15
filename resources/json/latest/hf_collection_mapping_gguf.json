@@ -303,49 +303,49 @@
                 {
                     "type": "model",
                     "family": "instruct",
-                    "repo_name":    "ibm-granite/granite-4.0-nano-300m",
+                    "repo_name":    "granite-4.0-nano-300m",
                     "default_quant": "q4_K_M"
                 },
                 {
                     "type": "model",
                     "family": "instruct",
-                    "repo_name":"ibm-granite/granite-4.0-nano-300m-base",
+                    "repo_name":"granite-4.0-nano-300m-base",
                     "default_quant": "q4_K_M"
                 },
                 {
                     "type": "model",
                     "family": "instruct",
-                    "repo_name":"ibm-granite/granite-4.0-h-nano-300m",
+                    "repo_name":"granite-4.0-h-nano-300m",
                     "default_quant": "q4_K_M"
                 },
                 {
                     "type": "model",
                     "family": "instruct",
-                    "repo_name":"ibm-granite/granite-4.0-h-nano-300m-base",
+                    "repo_name":"granite-4.0-h-nano-300m-base",
                     "default_quant": "q4_K_M"
                 },
                 {
                     "type": "model",
                     "family": "instruct",
-                    "repo_name":"ibm-granite/granite-4.0-nano-1b",
+                    "repo_name":"granite-4.0-nano-1b",
                     "default_quant": "q4_K_M"
                 },
                 {
                     "type": "model",
                     "family": "instruct",
-                    "repo_name":"ibm-granite/granite-4.0-nano-1b-base",
+                    "repo_name":"granite-4.0-nano-1b-base",
                     "default_quant": "q4_K_M"
                 },
                 {
                     "type": "model",
                     "family": "instruct",
-                    "repo_name":"ibm-granite/granite-4.0-h-nano-1b",
+                    "repo_name":"granite-4.0-h-nano-1b",
                     "default_quant": "q4_K_M"
                 },
                 {
                     "type": "model",
                     "family": "instruct",
-                    "repo_name":"ibm-granite/granite-4.0-h-nano-1b-base",
+                    "repo_name":"granite-4.0-h-nano-1b-base",
                     "default_quant": "q4_K_M"
                 }
             ]
