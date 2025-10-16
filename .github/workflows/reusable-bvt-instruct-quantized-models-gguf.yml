@@ -245,7 +245,7 @@ jobs:
     - name: test-llama-cli
       if: env.TEST_LLAMA_CLI == 'true'
       timeout-minutes: 10
-      continue-on-error: true
+      continue-on-error: false
       # 2>/dev/null
       run: |
         echo "invoking llama-cli to test inference (generation)..."
@@ -256,6 +256,7 @@ jobs:
           -p '${{env.LLAMA_REQUEST_PROMPT}}'' \
           -n ${{env.LLAMA_REQUEST_N_PREDICT}} --log-file ${{env.LLAMA_CLI_LOG_FILE}} 1>${{env.LLAMA_CLI_RESPONSE_FILE}}
         if [ $? -eq 1 ]; then
+          echo "llama-cli: ${{env.LLAMA_CLI_RESPONSE_FILE}} ($(wc -w ${{env.LLAMA_CLI_RESPONSE_FILE}} | awk '{print $1}') words):\n'$(cat ${{env.LLAMA_CLI_RESPONSE_FILE}})'"
           exit 1
         fi
 
