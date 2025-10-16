@@ -225,6 +225,7 @@ jobs:
       run: |
         curl --request GET --url http://${{env.LLAMA_SERVER_HOST}}:${{env.LLAMA_SERVER_PORT}}/health
         echo "TODO: Test for {"status":"ok"} from GET /health"
+        echo "${{env.LLAMA_REQUEST_PROMPT}}"
         curl --request POST \
           --url ttp://${{env.LLAMA_SERVER_HOST}}:${{env.LLAMA_SERVER_PORT}}/completion \
           --header "Content-Type: application/json" \
