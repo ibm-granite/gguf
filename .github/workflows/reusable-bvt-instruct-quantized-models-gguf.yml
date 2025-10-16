@@ -253,7 +253,7 @@ jobs:
         ./bin/llama-cli -no-cnv \
           -s ${{env.LLAMA_REQUEST_SEED}} \
           -m ./${{env.LOCAL_FNAME_QUANTIZED_GGUF}} \
-          -p '${{env.LLAMA_REQUEST_PROMPT}}'' \
+          -p '${{env.LLAMA_REQUEST_PROMPT}}' \
           -n ${{env.LLAMA_REQUEST_N_PREDICT}} --log-file ${{env.LLAMA_CLI_LOG_FILE}} 1>${{env.LLAMA_CLI_RESPONSE_FILE}}
         if [ $? -eq 1 ]; then
           echo "llama-cli: ${{env.LLAMA_CLI_RESPONSE_FILE}} ($(wc -w ${{env.LLAMA_CLI_RESPONSE_FILE}} | awk '{print $1}') words):\n'$(cat ${{env.LLAMA_CLI_RESPONSE_FILE}})'"
