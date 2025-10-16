@@ -41,9 +41,9 @@ env:
   LLAMA_CLI_RESPONSE_FILE: response.txt
   LLAMA_CLI_LOG_FILE: cli-log.txt
   LLAMA_REQUEST_SEED: 647063347
-  LLAMA_REQUEST_PROMPT: "Why is the sky blue?"
+  LLAMA_REQUEST_PROMPT: "What is the professional answer to \"Why is the sky blue?\""
   LLAMA_REQUEST_N_PREDICT: 128
-  LLAMA_RUN_BIN: ./bin/archive/2025-02-11/llama-run # ./bin/llama-run
+  LLAMA_RUN_BIN: ./bin/llama-run # ./bin/llama-run
   LLAMA_RUN_FLAGS: "-v -n 9"
   LLAMA_RESPONSE_REGEX: "(sky|scatter)+"
   LLAMA_SERVER_HOST: localhost
